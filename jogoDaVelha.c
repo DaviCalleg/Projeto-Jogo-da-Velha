@@ -11,8 +11,8 @@ int verificacao();
 
 
 //Variáveis Globais
-int mat_tut[3][3] = {1,2,3,4,5,6,7,8,9};
-int sim_jog;
+char mat_tut[3][3] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+char sim_jog;
 int rodada = 0;
 int verificador_parada = 0;
 
@@ -54,14 +54,25 @@ int selecao_modo (){
 
 //Tabuleiro do Jogo
 void tabuleiro(){
-    int i, j;
+    int i, j, contador = 1;
     for (i=0; i<3; i++){
        for (int j=0; j<3; j++){
-            if (j == 2) {
-                printf(" %d", mat_tut[i][j]);
-            } else{
-                printf(" %d |", mat_tut[i][j]);
+            if (mat_tut[i][j] == ' '){
+                if (j == 2) {
+                    printf(" %d", contador );
+                } else{
+                    printf(" %d |", contador);
+                }
             }
+            else {
+                if (j == 2) {
+                    printf(" %c", mat_tut[i][j] );
+                } else{
+                    printf(" %c |", mat_tut[i][j]);
+                }  
+            }
+
+            contador ++;
        }
        printf("\n");
     }
@@ -78,16 +89,11 @@ void tabuleiro(){
         if(escolha <= 9 && escolha > 0){
             for (int i=0; i<3; i++){
                 for (int j=0; j<3; j++){
-                    if(mat_tut[i][j] == escolha){
-                        mat_tut[i][j] = sim_jog;
-                        if(rodada > 4){
-                            verificacao();
-                            if(verificacao() == 1){
-                                return;
-                            }
-                        }
+                    int linha = (escolha - 1) / 3;
+                    int coluna = (escolha - 1) % 3;
+                    if (mat_tut[linha][coluna] == ' ') {
+                        mat_tut[linha][coluna] = sim_jog;
                     }
-                     
                 }
             }
             break;
@@ -103,24 +109,25 @@ void tabuleiro(){
  }
 
 //Opcao contra jogador
-void contraJogador (){
-    tabuleiro(); //Apresentando o tutorial para o jogador
-    for (rodada = 0; rodada<= 9; rodada++){
-        if(rodada % 2 == 0){
-            printf(" Vez do Jogador 1: ");
-            sim_jog = 77;
-            prog_rodada();
+void contraJogador() {
+    tabuleiro();
+    for (rodada = 0; rodada < 9; rodada++) {
+        if (rodada % 2 == 0) {
+            printf("Vez do Jogador 1: ");
+            sim_jog = 'X';
+        } else {
+            printf("Vez do Jogador 2: ");
+            sim_jog = 'O';
         }
-        else{
-            printf(" Vez do Jogador 2: ");
-            sim_jog = 88;
-            prog_rodada();
-        } 
+        prog_rodada();
+
+        if (verificador_parada) {
+            printf("\nJogador %c venceu!\n", sim_jog);
+            return;
+        }
     }
-    
-
+    printf("\nEmpate!\n");
 }
-
 //Opcao contra computador
 void contraComputador(){
     printf("\ncontra Computador");
