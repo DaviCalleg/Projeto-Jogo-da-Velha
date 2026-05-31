@@ -7,7 +7,7 @@ void tabuleiro();
 void prog_rodada();
 void contraJogador();
 void contraComputador();
-int verificacao();
+void verificacao();
 
 
 //Variáveis Globais
@@ -120,6 +120,7 @@ void contraJogador() {
             sim_jog = 'O';
         }
         prog_rodada();
+        verificacao();
 
         if (verificador_parada) {
             printf("\nJogador %c venceu!\n", sim_jog);
@@ -134,7 +135,7 @@ void contraComputador(){
     tabuleiro(); //Apresentando o tutorial para o jogador
 }
 
-int verificacao(){
+void verificacao(){
     int verificador = 0;
 
     //Ganhando na linha
@@ -142,13 +143,12 @@ int verificacao(){
         verificador = 0;
         for (int j=0; j<3; j++){
             if (mat_tut[i][j] == sim_jog){
-                verificador += 1;
-
+                verificador ++;
             }
         }
         if(verificador == 3){
             verificador_parada = 1;
-            return verificador_parada;
+            break;
         }
     }
       
@@ -157,7 +157,7 @@ int verificacao(){
         verificador = 0;
         for (int j=0; j<3; j++){
             if (mat_tut[j][i] == sim_jog){
-                verificador += 1;
+                verificador ++;
             }
         }
         if(verificador == 3){
@@ -166,19 +166,24 @@ int verificacao(){
         }
     }
     
-    //Ganhando na diagonal
+    //Ganhando na diagonal principal
+    verificador = 0;
     for (int i = 0; i<3; i++){
-        verificador = 0;
-        for (int j = 0; j < 3; j++){
-            if ( i == j){
-                if (mat_tut[i][j] == sim_jog){
-                    verificador += 1;
-                }
-            }
+        if (mat_tut[i][i] == sim_jog){
+            verificador ++;
         }
-        if(verificador == 3){
-            verificador_parada = 1;
-            break;
+    }
+    if(verificador == 3){
+        verificador_parada = 1;
+    }
+
+    verificador = 0;
+    for (int i = 0; i < 3; i++) {
+        if (mat_tut[i][2 - i] == sim_jog) {
+            verificador++;
         }
+    }
+    if (verificador == 3) {
+        verificador_parada = 1;
     }
 }
