@@ -177,6 +177,7 @@ void verificacao(){
         verificador_parada = 1;
     }
 
+    //Ganhando na diagonal secundária
     verificador = 0;
     for (int i = 0; i < 3; i++) {
         if (mat_tut[i][2 - i] == sim_jog) {
