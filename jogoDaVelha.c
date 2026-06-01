@@ -81,7 +81,7 @@ void tabuleiro(){
 }
 
  void prog_rodada(){
-    int escolha;
+    int escolha, verificador = 0;
 
     while (1){
         printf("\nEscolha a posicao: ");
@@ -93,10 +93,16 @@ void tabuleiro(){
                     int coluna = (escolha - 1) % 3;
                     if (mat_tut[linha][coluna] == ' ') {
                         mat_tut[linha][coluna] = sim_jog;
+                        verificador = 1;
                     }
                 }
             }
-            break;
+            if (verificador){
+                break;
+            } else {
+                printf("Selecione um espaco valido\n");
+                tabuleiro();
+            }
         } 
         else{
             printf("Selecione um espaco valido\n");
