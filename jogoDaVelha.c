@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 //Funções Utilizadas
 int selecao_modo();
@@ -15,11 +16,12 @@ char mat_tut[3][3] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 char sim_jog;
 int rodada = 0;
 int verificador_parada = 0;
-
+int jogadorXcomputador = 0;
+int jogadorXjogador=0;
 //Main
 int main(){
     int res_mod;
-
+    srand(time(NULL));
     res_mod = selecao_modo(); //Escolhendo o modo de Jogo
 
 
@@ -81,41 +83,95 @@ void tabuleiro(){
 }
 
  void prog_rodada(){
-    int escolha, verificador = 0;
+    int escolha;
+    int verificador = 0;
 
-    while (1){
-        printf("\nEscolha a posicao: ");
-        scanf("%d", &escolha);
-        if(escolha <= 9 && escolha > 0){
-            for (int i=0; i<3; i++){
-                for (int j=0; j<3; j++){
-                    int linha = (escolha - 1) / 3;
-                    int coluna = (escolha - 1) % 3;
-                    if (mat_tut[linha][coluna] == ' ') {
-                        mat_tut[linha][coluna] = sim_jog;
-                        verificador = 1;
+    if (jogadorXjogador){
+        while (1){
+            printf("\nEscolha a posicao: ");
+            scanf("%d", &escolha);
+            if(escolha <= 9 && escolha > 0){
+                for (int i=0; i<3; i++){
+                    for (int j=0; j<3; j++){
+                        int linha = (escolha - 1) / 3;
+                        int coluna = (escolha - 1) % 3;
+                        if (mat_tut[linha][coluna] == ' ') {
+                            mat_tut[linha][coluna] = sim_jog;
+                            verificador = 1;
+                        }
                     }
                 }
-            }
-            if (verificador){
-                break;
-            } else {
+                if (verificador){
+                    break;
+                } else {
+                    printf("Selecione um espaco valido\n");
+                    tabuleiro();
+                }
+            } 
+            else{
                 printf("Selecione um espaco valido\n");
                 tabuleiro();
-            }
-        } 
-        else{
-            printf("Selecione um espaco valido\n");
-            tabuleiro();
-        } 
+            } 
+        }
     }
+    else if (jogadorXcomputador){
+        if (rodada % 2 == 0){
+            while (1){
+                printf("\nEscolha a posicao: ");
+                scanf("%d", &escolha);
+                if(escolha <= 9 && escolha > 0){
+                    for (int i=0; i<3; i++){
+                        for (int j=0; j<3; j++){
+                            int linha = (escolha - 1) / 3;
+                            int coluna = (escolha - 1) % 3;
+                            if (mat_tut[linha][coluna] == ' ') {
+                                mat_tut[linha][coluna] = sim_jog;
+                                verificador = 1;
+                            }
+                        }
+                    }
+                    if (verificador){
+                        break;
+                    } else {
+                        printf("Selecione um espaco valido\n");
+                        tabuleiro();
+                    }
+                } 
+                else{
+                    printf("Selecione um espaco valido\n");
+                    tabuleiro();
+                } 
+            }
+        }
+        else {
+            //Escolha aleatoria do computador, se ele escolher em alguma posicao ja jogada, vai repetir o sorteio
+            while(1){
+                escolha = (rand() % 9) + 1;
+                for (int i=0; i<3; i++){
+                    for (int j=0; j<3; j++){
+                        int linha = (escolha - 1) / 3;
+                        int coluna = (escolha - 1) % 3;
+                        if (mat_tut[linha][coluna] == ' ') {
+                            mat_tut[linha][coluna] = sim_jog;
+                            verificador = 1;
+                        }
+                    }
+                }
+                if(verificador) break;
+                else escolha = (rand() % 9) + 1;
+            }
+        }
 
+    }
+    printf("\n");
     tabuleiro();
     
  }
 
 //Opcao contra jogador
 void contraJogador() {
+    jogadorXjogador = 1;
+    rodada = 0;
     tabuleiro();
     for (rodada = 0; rodada < 9; rodada++) {
         if (rodada % 2 == 0) {
@@ -137,8 +193,28 @@ void contraJogador() {
 }
 //Opcao contra computador
 void contraComputador(){
-    printf("\ncontra Computador");
-    tabuleiro(); //Apresentando o tutorial para o jogador
+    jogadorXcomputador = 1;
+    jogadorXjogador = 0;
+    verificador_parada = 0;
+    rodada = 0;
+    tabuleiro();
+    for(rodada=0; rodada<9; rodada++){
+        if (rodada % 2 == 0){
+            printf("Vez do jogador 1: ");
+            sim_jog = 'X';
+        } else {
+            sim_jog = 'O';
+        }
+        prog_rodada();
+        verificacao();
+        //Se alguem venceu, a funcao mostra quem foi o vencedor e sai da funcao
+        if (verificador_parada) {
+            printf("\nJogador %c venceu!\n", sim_jog);
+            return;
+        }
+    }
+    printf("\nEmpate!\n");
+
 }
 
 void verificacao(){
