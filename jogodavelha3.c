@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h> //biblioteca para adicionar tempo (Somente par fins visuais)
+#include <unistd.h> //biblioteca para adicionar tempo (Somente para fins visuais)
 
 //Funções Utilizadas
 int menu();
@@ -76,7 +76,7 @@ void tabuleiro(){
             }
             else {
                 if (j == 2) {
-                    printf(" %c", mat_tut[i][j] );
+                    printf(" %c", mat_tut[i][j]);
                 } else{
                     printf(" %c |", mat_tut[i][j]);
                 }  
@@ -92,8 +92,8 @@ void tabuleiro(){
 
 //Progressão da Rodada
 void prog_rodada(){
-    int escolha, escolhalinha, escolhacoluna;
-    int verificador = 0;
+    int escolha, escolhalinha, escolhacoluna, ok = 0;
+    int verificador = 0,verificadorcomp = 0;
 
     if (jogadorXjogador){
         while (1){
@@ -102,16 +102,14 @@ void prog_rodada(){
 
             troca_de_tela();
 
-            if(escolha <= 9 && escolha > 0){
-                for (int i=0; i<3; i++){
-                    for (int j=0; j<3; j++){
-                        int linha = (escolha - 1) / 3;
-                        int coluna = (escolha - 1) % 3;
-                        if (mat_tut[linha][coluna] == ' ') {
-                            mat_tut[linha][coluna] = sim_jog;
-                            verificador = 1;
-                        }
-                    }
+                if(escolha <= 9 && escolha > 0){
+    
+                    int linha = (escolha - 1) / 3;
+                    int coluna = (escolha - 1) % 3;
+                    if (mat_tut[linha][coluna] == ' ') {
+                        mat_tut[linha][coluna] = sim_jog;
+                        verificador = 1;
+                        
                 }
                 if (verificador){
                     break;
@@ -160,7 +158,161 @@ void prog_rodada(){
         }
         else {
            
-           if(rodada < 3){ //Escolha aleatoria do computador, se ele escolher em alguma posicao ja jogada, vai repetir o sorteio
+               //Atacando na linha
+                for (int i=0; i<3; i++){
+                    verificadorcomp = 0;
+                    for (int j=0; j<3; j++){
+                        if (mat_tut[i][j] == 'o'){
+                            verificadorcomp ++;
+                        }
+                        else{
+                            escolhalinha = i;
+                            escolhacoluna = j;
+                        }
+                    }
+                    if(verificadorcomp == 2){
+                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                             mat_tut[escolhalinha][escolhacoluna] = 'o';
+                            return;
+                        }
+                    }
+                }
+                
+                //Atacando na coluna
+                for (int j=0; j<3; j++){
+                    verificadorcomp = 0;
+                    for (int i=0; i<3; i++){
+                        if (mat_tut[i][j] == 'o'){
+                            verificadorcomp ++;
+                        }
+                        else{
+                            escolhalinha = i;
+                            escolhacoluna = j;
+                        }
+                    }
+                    if(verificadorcomp == 2){
+                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                            mat_tut[escolhalinha][escolhacoluna] = 'o';
+                            return;
+                        }
+                    }
+                }
+                
+                //Atacando na diagonal principal
+                verificadorcomp = 0;
+                for (int i = 0; i<3; i++){
+                    if (mat_tut[i][i] == 'o'){
+                        verificadorcomp ++;
+                    }
+                    else{
+                        escolhalinha = i;
+                        escolhacoluna = i;
+                    }
+                }
+                if(verificadorcomp == 2){
+                    if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                        mat_tut[escolhalinha][escolhacoluna] = 'o';
+                        return;
+                    }    
+                }
+
+                //Atacando na diagonal secundária
+                verificadorcomp = 0;
+                for (int i = 0; i < 3; i++) {
+                    if (mat_tut[i][2 - i] == 'o') {
+                        verificadorcomp++;
+                    }
+                    else{
+                        escolhalinha = i;
+                        escolhacoluna = 2 - i;
+
+                    }
+                }
+                if (verificadorcomp == 2) {
+                   if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                        mat_tut[escolhalinha][escolhacoluna] = 'o';
+                        return;
+                   }    
+                }
+
+
+                //Defendendo na linha
+                for (int i=0; i<3; i++){
+                    verificadorcomp = 0;
+                    for (int j=0; j<3; j++){
+                        if (mat_tut[i][j] == 'x'){
+                            verificadorcomp ++;
+                        }
+                        else{
+                            escolhalinha = i;
+                            escolhacoluna = j;
+                        }
+                    }
+                    if(verificadorcomp == 2){
+                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                             mat_tut[escolhalinha][escolhacoluna] = 'o';
+                             return;
+                        }
+                    }
+                }
+                
+                //Defendendo na coluna
+                for (int j=0; j<3; j++){
+                    verificadorcomp = 0;
+                    for (int i=0; i<3; i++){
+                        if (mat_tut[i][j] == 'x'){
+                            verificadorcomp ++;
+                        }
+                        else{
+                            escolhalinha = i;
+                            escolhacoluna = j;
+                        }
+                    }
+                    if(verificadorcomp == 2){
+                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                            mat_tut[escolhalinha][escolhacoluna] = 'o';
+                            return;
+                        }    
+                    }
+                }
+                
+                //Defendendo na diagonal principal
+                verificadorcomp = 0;
+                for (int i = 0; i<3; i++){
+                    if (mat_tut[i][i] == 'x'){
+                        verificadorcomp ++;
+                    }
+                    else{
+                        escolhalinha = i;
+                        escolhacoluna = i;
+                    }
+                }
+                if(verificadorcomp == 2){
+                    if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                        mat_tut[escolhalinha][escolhacoluna] = 'o';
+                        return;
+                    }    
+                }
+
+                //Defendendo na diagonal secundária
+                verificadorcomp = 0;
+                for (int i = 0; i < 3; i++) {
+                    if (mat_tut[i][2 - i] == 'x') {
+                        verificadorcomp++;
+                    }
+                    else{
+                        escolhalinha = i;
+                        escolhacoluna = 2 - i;
+
+                    }
+                }
+                if (verificadorcomp == 2) {
+                   if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o'){
+                        mat_tut[escolhalinha][escolhacoluna] = 'o';
+                        return;
+                   }    
+                }
+             
                 while(1){
                     escolha = (rand() % 9) + 1;
                     for (int i=0; i<3; i++){
@@ -176,174 +328,6 @@ void prog_rodada(){
                     if(verificador) break;
                     else escolha = (rand() % 9) + 1;
                 }
-            }
-            else{
-            
-               //Atacando na linha
-                for (int i=0; i<3; i++){
-                    verificador = 0;
-                    for (int j=0; j<3; j++){
-                        if (mat_tut[i][j] == 'o'){
-                            verificador ++;
-                        }
-                        else{
-                            escolhalinha = i;
-                            escolhacoluna = j;
-                        }
-                    }
-                    if(verificador == 2){
-                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                             mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                    }
-                }
-                
-                //Atacando na coluna
-                for (int j=0; j<3; j++){
-                    verificador = 0;
-                    for (int i=0; i<3; i++){
-                        if (mat_tut[i][j] == 'o'){
-                            verificador ++;
-                        }
-                        else{
-                            escolhalinha = i;
-                            escolhacoluna = j;
-                        }
-                    }
-                    if(verificador == 2){
-                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                            mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                    }
-                }
-                
-                //Atacando na diagonal principal
-                verificador = 0;
-                for (int i = 0; i<3; i++){
-                    if (mat_tut[i][i] == 'o'){
-                        verificador ++;
-                    }
-                    else{
-                        escolhalinha = i;
-                        escolhacoluna = i;
-                    }
-                }
-                if(verificador == 2){
-                    if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                        mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                }
-
-                //Atacando na diagonal secundária
-                verificador = 0;
-                for (int i = 0; i < 3; i++) {
-                    if (mat_tut[i][2 - i] == 'o') {
-                        verificador++;
-                    }
-                    else{
-                        escolhalinha = i;
-                        escolhacoluna = 2 - 1;
-
-                    }
-                }
-                if (verificador == 2) {
-                   if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                        mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                }
-
-
-                //Defendendo na linha
-                for (int i=0; i<3; i++){
-                    verificador = 0;
-                    for (int j=0; j<3; j++){
-                        if (mat_tut[i][j] == 'x'){
-                            verificador ++;
-                        }
-                        else{
-                            escolhalinha = i;
-                            escolhacoluna = j;
-                        }
-                    }
-                    if(verificador == 2){
-                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                             mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                    }
-                }
-                
-                //Defendendo na coluna
-                for (int j=0; j<3; j++){
-                    verificador = 0;
-                    for (int i=0; i<3; i++){
-                        if (mat_tut[i][j] == 'x'){
-                            verificador ++;
-                        }
-                        else{
-                            escolhalinha = i;
-                            escolhacoluna = j;
-                        }
-                    }
-                    if(verificador == 2){
-                        if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                            mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                    }
-                }
-                
-                //Defendendo na diagonal principal
-                verificador = 0;
-                for (int i = 0; i<3; i++){
-                    if (mat_tut[i][i] == 'x'){
-                        verificador ++;
-                    }
-                    else{
-                        escolhalinha = i;
-                        escolhacoluna = i;
-                    }
-                }
-                if(verificador == 2){
-                    if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                        mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                }
-
-                //Defendendo na diagonal secundária
-                verificador = 0;
-                for (int i = 0; i < 3; i++) {
-                    if (mat_tut[i][2 - i] == 'x') {
-                        verificador++;
-                    }
-                    else{
-                        escolhalinha = i;
-                        escolhacoluna = 2 - i;
-
-                    }
-                }
-                if (verificador == 2) {
-                   if(mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o')
-                        mat_tut[escolhalinha][escolhacoluna] = 'o';
-                        return;
-                }
-             
-               while(1){
-                    verificador = 0;
-                    escolha = (rand() % 9) + 1;
-                    for (int i=0; i<3; i++){
-                        for (int j=0; j<3; j++){
-                            int linha = (escolha - 1) / 3;
-                            int coluna = (escolha - 1) % 3;
-                            if (mat_tut[escolhalinha][escolhacoluna] != 'x' && mat_tut[escolhalinha][escolhacoluna] != 'o') {
-                                mat_tut[linha][coluna] = 'o';
-                                verificador = 1;
-                            }
-                        }
-                    }
-                    if(verificador) break;
-                    else escolha = (rand() % 9) + 1;
-                }
-                
-            }
 
         }
     }
@@ -527,7 +511,7 @@ void selecao_modo(){
 //Motra a pontuação acumulada até o usuário sair do jogo
 void pontuacao(){
 
-    printf("\nPontuação: \n\nJogador x: %d \nJogador o: %d \nComputador: %d\n", plc[0], plc[1], plc[3]);
+    printf("\nPontuação: \n\nJogador x: %d \nJogador o: %d \nComputador: %d\n", plc[0], plc[1], plc[2]);
     
     troca_de_tela();
     sleep(2);
