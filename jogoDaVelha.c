@@ -33,7 +33,6 @@ int main(){
 //Menu de escolha
 int menu(){
     int sel_men = 0;
-
     do{
         do{
             printf("\n[1] Jogar\n[2] Pontuação\n[3] Sair\n\n->");
