@@ -21,6 +21,7 @@ int rodada = 0;
 int verificador_parada = 0;
 int jogadorXcomputador = 0;
 int jogadorXjogador = 0;
+int dificuldade = 0;
 int plc[3] = {0};
 
 //Main
@@ -157,15 +158,25 @@ int jogadaComputador(char simb_alvo){
 
 //Progressão da Rodada
 void prog_rodada(){
-    int escolha, verificador = 0; 
+    int escolha, verificador = 0;
     if (jogadorXjogador) jogadaJogador(&escolha, &verificador);
     else if (jogadorXcomputador){
         if (rodada % 2 == 0) jogadaJogador(&escolha, &verificador);
         else{
-            // 1° Passo: Tentar Atacar (Completar sequência de 'o')
-            if (jogadaComputador('o')) return;
-            // 2° Passo: Tentar Defender (Bloquear sequência de 'x')
-            if (jogadaComputador('x')) return;
+            int chance = rand()%100, jogarCerto = 0;
+            if (dificuldade == 3) jogarCerto = 1; 
+            else if (dificuldade == 2){
+                if (chance < 75) jogarCerto = 1;
+            }
+            else if (dificuldade == 1){
+                if (chance<50) jogarCerto = 1;
+            }
+            if(jogarCerto){
+                // 1° Passo: Tentar Atacar (Completar sequência de 'o')
+                if (jogadaComputador('o')) return;
+                // 2° Passo: Tentar Defender (Bloquear sequência de 'x')
+                if (jogadaComputador('x')) return;
+            }
             // 3° Passo: Jogada Aleatória (Se não tiver o que atacar ou defender)
             while(1){
                 escolha = (rand() % 9) + 1;
@@ -193,6 +204,10 @@ void iniciar_partida(int modo_jogo) {
     } else {
         jogadorXjogador = 0;
         jogadorXcomputador = 1;
+        do{
+            printf("Dificuldades:\n[1] facil\n[2] medio\n[3] dificil\n");
+            scanf("%d", &dificuldade);
+        } while(dificuldade<1 || dificuldade >3);
     }
     verificador_parada = 0;
     for (rodada = 0; rodada < 9; rodada++) {
