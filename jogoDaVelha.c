@@ -49,7 +49,7 @@ int menu(){
 
 //Tabuleiro do Jogo
 void tabuleiro(){
-    int i, contador = 1; // 'j' removido, pois é declarado dentro do 'for'
+    int i, contador = 1;
     printf("\n\n");
 
     for (i=0; i<3; i++){
@@ -157,7 +157,7 @@ int jogadaComputador(char simb_alvo){
 
 //Progressão da Rodada
 void prog_rodada(){
-    int escolha, verificador = 0; // variáveis não utilizadas foram removidas daqui
+    int escolha, verificador = 0; 
     if (jogadorXjogador) jogadaJogador(&escolha, &verificador);
     else if (jogadorXcomputador){
         if (rodada % 2 == 0) jogadaJogador(&escolha, &verificador);
