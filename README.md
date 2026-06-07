@@ -15,7 +15,7 @@ com:
 - Placar:
 Para somatória total da pontuação.
 
-- Dois modos de jogos:
+- Dois modos de jogo:
 Sendo Jogador x Jogador e Jogador x Computador.
 
 - Dificuldade aumentada (Jogador x Computador):
