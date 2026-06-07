@@ -12,13 +12,13 @@ Apresenta funcionalidades basicas
 dessa modalidade. Porém, ainda conta 
 com:
 
-- Placar
+- Placar:
 Para somatória total da pontuação.
 
-- Dois modos de jogos
+- Dois modos de jogos:
 Sendo Jogador x Jogador e Jogador x Computador.
 
-- Dificuldade aumentada (Jogador x Computador)
+- Dificuldade aumentada (Jogador x Computador):
 Pois o código é capa de bloquear jogadas 
 promissoras e efetuar ataques pra ganhar o jogo.
 
