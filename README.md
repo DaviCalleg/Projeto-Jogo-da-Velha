@@ -19,6 +19,6 @@ Para somatória total da pontuação.
 Sendo Jogador x Jogador e Jogador x Computador.
 
 - Dificuldade aumentada (Jogador x Computador):
-Pois o código é capa de bloquear jogadas 
+O código é capaz de bloquear jogadas 
 promissoras e efetuar ataques pra ganhar o jogo.
 
