@@ -43,13 +43,13 @@ int menu(char matriz_jogo[3][3], int placar[3]){
                 opcao_menu = 0; // Força a repetição do loop
             }
             troca_de_tela();
-        }while (opcao_menu != 1 && opcao_menu != 2 && opcao_menu != 3);
+        }while (opcao_menu != 1 && opcao_menu != 2 && opcao_menu != 3 && opcao_menu != 4);
         
         if(opcao_menu == 1) selecao_modo(matriz_jogo, placar);
         if(opcao_menu == 2) pontuacao(placar);
         if(opcao_menu == 3){
            do{
-            printf("\nEscolha o visual do tabuleiro\n[1] Com números\n[2] Sem números\n\n->");
+            printf("\nEscolha o visual do tabuleiro\n\n[1] Com números\n[2] Sem números\n\n->");
             if(scanf("%d", &mod_visual) != 1) { // Se não ler um número
                 limpar_buffer();
             }
@@ -152,7 +152,7 @@ void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
             }
             tabuleiro(matriz_jogo);
             troca_de_tela();
-            sleep(2);
+            
 
             // Atualiza o placar corretamente dependendo de quem ganhou
             if (rodada % 2 == 0) {
@@ -173,16 +173,20 @@ void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
 
 
             if(jogar_nov == 1){
-             
+             jogar_nov = 0;
              troca_de_tela();
              iniciar_partida (modo_jogo, matriz_jogo, placar);
-
+             
             }
             else{
+                if(jogar_nov == 2){
+                jogar_nov = 0;
                 troca_de_tela();
                 return; // Sai da função, encerrando a partida
+                }
             }
-
+            
+            
             
         }
     }
@@ -200,15 +204,17 @@ void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
     }while(jogar_nov != 1 && jogar_nov != 2);
 
     if(jogar_nov == 1){
-       
+        jogar_nov = 0;
         troca_de_tela ();
         iniciar_partida (modo_jogo, matriz_jogo, placar);
-
+    }
+    else{
+        if(jogar_nov == 2){
+        jogar_nov = 0;
+        troca_de_tela();
+        return; // Sai da função, encerrando a partida
         }
-        else{
-            troca_de_tela();
-            return; // Sai da função, encerrando a partida
-        }
+    }
 
     
     sleep(2);
