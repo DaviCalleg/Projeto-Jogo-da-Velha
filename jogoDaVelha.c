@@ -17,6 +17,9 @@ void reset_tabuleiro(char matriz_jogo[3][3]);
 void pontuacao(int placar[3]);
 void troca_de_tela();
 
+//Variáveis Globais
+int mod_visual = 1;
+
 // Main
 int main(){
     srand(time(NULL));
@@ -34,7 +37,7 @@ int menu(char matriz_jogo[3][3], int placar[3]){
     int opcao_menu = 0;
     do{
         do{
-            printf("\n[1] Jogar\n[2] Pontuacao\n[3] Sair\n\n->");
+            printf("\n[1] Jogar\n[2] Pontuacao\n[3] Visual do tabuleiro\n[4] Sair\n\n->");
             if(scanf("%d", &opcao_menu) != 1) { // Se não ler um número
                 limpar_buffer();
                 opcao_menu = 0; // Força a repetição do loop
@@ -44,7 +47,17 @@ int menu(char matriz_jogo[3][3], int placar[3]){
         
         if(opcao_menu == 1) selecao_modo(matriz_jogo, placar);
         if(opcao_menu == 2) pontuacao(placar);
-    }while(opcao_menu != 3);
+        if(opcao_menu == 3){
+           do{
+            printf("\nEscolha o visual do tabuleiro\n[1] Com números\n[2] Sem números\n\n->");
+            if(scanf("%d", &mod_visual) != 1) { // Se não ler um número
+                limpar_buffer();
+            }
+            troca_de_tela();
+        }while (mod_visual != 1 && mod_visual != 2);
+
+        }
+    }while(opcao_menu != 4);
     
     printf("\nFim de jogo!\n\n");
     return 0;
@@ -69,29 +82,45 @@ void tabuleiro(char matriz_jogo[3][3]){
     int i, contador = 1;
     printf("\n\n");
 
-    for (i=0; i<3; i++){
-       for (int j=0; j<3; j++){
-            if (matriz_jogo[i][j] == ' '){
-                if (j == 2) printf(" %d", contador);
-                else printf(" %d |", contador);
+    if(mod_visual == 1){
+        for (i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                    if (matriz_jogo[i][j] == ' '){
+                        if (j == 2) printf(" %d", contador);
+                        else printf(" %d |", contador);
+                    }
+                    else {
+                        if (j == 2) printf(" %c", matriz_jogo[i][j]);
+                        else printf(" %c |", matriz_jogo[i][j]);
+                    }
+                    contador ++;
             }
-            else {
+            printf("\n");
+        }
+    }
+    else{
+      for (i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                   
                 if (j == 2) printf(" %c", matriz_jogo[i][j]);
                 else printf(" %c |", matriz_jogo[i][j]);
+                       
             }
-            contador ++;
-       }
-       printf("\n");
+            printf("\n");
+        }
+
     }
 }
 
+//Inicia a partida
 void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
     int dificuldade = 0;
     char simbolo_jogador;
+    int jogar_nov = 0;
     
     if (modo_jogo == 2) {
         do{
-            printf("\nDificuldades:\n\n[1] facil\n[2] medio\n[3] dificil\n->");
+            printf("\nDificuldades:\n\n[1] Facil\n[2] Medio\n[3] Dificil\n\n->");
             scanf("%d", &dificuldade);
             troca_de_tela();
             limpar_buffer();
@@ -135,7 +164,26 @@ void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
             }
 
             reset_tabuleiro(matriz_jogo);
-            return; // Sai da função, encerrando a partida
+             
+            
+          do{
+            printf("\nJogar Novamente:\n\n[1] Sim\n[2] Não\n\n->");
+            scanf("%d", &jogar_nov);
+          }while(jogar_nov != 1 && jogar_nov != 2);
+
+
+            if(jogar_nov == 1){
+             
+             troca_de_tela();
+             iniciar_partida (modo_jogo, matriz_jogo, placar);
+
+            }
+            else{
+                troca_de_tela();
+                return; // Sai da função, encerrando a partida
+            }
+
+            
         }
     }
 
@@ -143,7 +191,26 @@ void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
     printf("\nEmpate!");
     tabuleiro(matriz_jogo);
     reset_tabuleiro(matriz_jogo);
-    troca_de_tela();
+    troca_de_tela ();
+    
+
+    do{
+        printf("\nJogar Novamente:\n\n[1] Sim\n[2] Não\n\n->");
+        scanf("%d", &jogar_nov);
+    }while(jogar_nov != 1 && jogar_nov != 2);
+
+    if(jogar_nov == 1){
+       
+        troca_de_tela ();
+        iniciar_partida (modo_jogo, matriz_jogo, placar);
+
+        }
+        else{
+            troca_de_tela();
+            return; // Sai da função, encerrando a partida
+        }
+
+    
     sleep(2);
 }
 
@@ -195,6 +262,7 @@ void prog_rodada(char matriz_jogo[3][3], int modo_jogo, int dificuldade, int rod
     }
 }
 
+//Jogadas feitos pelos jogadores
 void jogadaJogador(char matriz_jogo[3][3], char simbolo_jogador, int *escolha, int *jogada_valida){
     while (1){
         printf("\nEscolha a posicao -> ");
@@ -223,6 +291,7 @@ void jogadaJogador(char matriz_jogo[3][3], char simbolo_jogador, int *escolha, i
     }
 }
 
+//Jogadas feitas pelo Computador
 int jogadaComputador(char matriz_jogo[3][3], char simb_alvo){
     int casas_iguais, escolhaLinha, escolhaColuna;
     
@@ -332,8 +401,6 @@ int verificacao(char matriz_jogo[3][3], char simbolo_jogador){
     
     return 0; // Ninguém ganhou ainda
 }
-
-
 
 // Mostra a pontuação acumulada até o usuário sair do jogo
 void pontuacao(int placar[3]){
