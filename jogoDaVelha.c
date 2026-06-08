@@ -21,7 +21,6 @@ void troca_de_tela();
 int main(){
     srand(time(NULL));
     
-    // Variáveis com nomes claros e sem abreviações confusas
     char matriz_jogo[3][3] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
     int placar[3] = {0}; // placar[0] = Jogador X | placar[1] = Jogador O | placar[2] = Computador
     
