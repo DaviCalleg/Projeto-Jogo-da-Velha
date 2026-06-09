@@ -1,3 +1,5 @@
+//Alunos: Arthur Rocha Saldanha, Davi Callegario Caetano e Felipe Silva Mantuani.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -23,7 +25,8 @@ int mod_visual = 1;
 // Main
 int main(){
     srand(time(NULL));
-    
+    
+
     char matriz_jogo[3][3] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
     int placar[3] = {0}; // placar[0] = Jogador X | placar[1] = Jogador O | placar[2] = Computador
     
