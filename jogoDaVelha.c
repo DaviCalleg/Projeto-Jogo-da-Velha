@@ -68,11 +68,13 @@ void selecao_modo(char matriz_jogo[3][3], int placar[3]){
     int opcao_modo;
     printf("\nSelecione o modo de jogo:\n\n [1] Jogador x Jogador\n [2] Jogador x Computador\n\n->");
     scanf("%d", &opcao_modo);
+    limpar_buffer();
     troca_de_tela();
-    
     while (opcao_modo != 1 && opcao_modo != 2){
-        printf("\nEscolha um modo de jogo existente!\n"); 
+        printf("\nEscolha um modo de jogo existente!\n");
         printf("\nSelecione o modo de jogo:\n 1 -> Jogador x Jogador\n 2 -> Jogador x Computador\n\n->");
+        scanf("%d", &opcao_modo);
+        limpar_buffer();
     }
     iniciar_partida(opcao_modo, matriz_jogo, placar);
 }
@@ -104,7 +106,6 @@ void tabuleiro(char matriz_jogo[3][3]){
                    
                 if (j == 2) printf(" %c", matriz_jogo[i][j]);
                 else printf(" %c |", matriz_jogo[i][j]);
-                       
             }
             printf("\n");
         }
@@ -112,112 +113,69 @@ void tabuleiro(char matriz_jogo[3][3]){
     }
 }
 
+// Pergunta se quer jogar novamente e retorna 1 (sim) ou 0 (não)
+int jogar_novamente(){
+    int jogar_nov = 0;
+    do {
+        printf("\nJogar Novamente:\n\n[1] Sim\n[2] Nao\n\n->");
+        scanf("%d", &jogar_nov);
+    } while (jogar_nov != 1 && jogar_nov != 2);
+    troca_de_tela();
+    return jogar_nov == 1;
+}
+
 //Inicia a partida
 void iniciar_partida(int modo_jogo, char matriz_jogo[3][3], int placar[3]) {
     int dificuldade = 0;
-    char simbolo_jogador;
-    int jogar_nov = 0;
-    
     if (modo_jogo == 2) {
-        do{
+        do {
             printf("\nDificuldades:\n\n[1] Facil\n[2] Medio\n[3] Dificil\n\n->");
             scanf("%d", &dificuldade);
             troca_de_tela();
             limpar_buffer();
-        } while(dificuldade != 1 && dificuldade != 2 && dificuldade != 3);
+        } while (dificuldade != 1 && dificuldade != 2 && dificuldade != 3);
     }
-    
-    for (int rodada = 0; rodada < 9; rodada++) {
-        if (rodada % 2 == 0) {
-            printf("\nVez do Jogador 1 (x): ");
-            simbolo_jogador = 'x';
-            tabuleiro(matriz_jogo); // Mostra o tabuleiro para o jogador 1
-        } else {
-            if (modo_jogo == 1) {
-                printf("\nVez do Jogador 2 (o): ");
-                tabuleiro(matriz_jogo); // Mostra o tabuleiro para o jogador 2
+    // Loop de partidas
+    do {
+        char simbolo_jogador;
+        int partida_encerrada = 0;
+        for (int rodada = 0; rodada < 9; rodada++) {
+            if (rodada % 2 == 0) {
+                printf("\nVez do Jogador 1 (x): ");
+                simbolo_jogador = 'x';
+                tabuleiro(matriz_jogo);
+            } else {
+                if (modo_jogo == 1) {
+                    printf("\nVez do Jogador 2 (o): ");
+                    tabuleiro(matriz_jogo);
+                }
+                simbolo_jogador = 'o';
             }
-            simbolo_jogador = 'o';
+            prog_rodada(matriz_jogo, modo_jogo, dificuldade, rodada, simbolo_jogador);
+            if (verificacao(matriz_jogo, simbolo_jogador)) {
+                if (modo_jogo == 2 && rodada % 2 != 0)
+                    printf("\nO Computador venceu!");
+                else
+                    printf("\nJogador %c venceu!", simbolo_jogador);
+
+                tabuleiro(matriz_jogo);
+                troca_de_tela();
+                if (rodada % 2 == 0) placar[0]++;
+                else if (modo_jogo == 1) placar[1]++;
+                else placar[2]++;
+                partida_encerrada = 1;
+                break;
+            }
         }
 
-        // Executa a jogada
-        prog_rodada(matriz_jogo, modo_jogo, dificuldade, rodada, simbolo_jogador);
-
-        // 3. Verificação de Vitória
-        if (verificacao(matriz_jogo, simbolo_jogador)) { // Se a função retornar 1 (Verdadeiro)
-            if (modo_jogo == 2 && rodada % 2 != 0) {
-                printf("\nO Computador venceu!");
-            } else {
-                printf("\nJogador %c venceu!", simbolo_jogador);
-            }
+        if (!partida_encerrada) {
+            printf("\nEmpate!");
             tabuleiro(matriz_jogo);
             troca_de_tela();
-            
-
-            // Atualiza o placar corretamente dependendo de quem ganhou
-            if (rodada % 2 == 0) {
-                placar[0]++; // Vitória do Jogador 1
-            } else if (modo_jogo == 1) {
-                placar[1]++; // Vitória do Jogador 2
-            } else {
-                placar[2]++; // Vitória do Computador
-            }
-
-            reset_tabuleiro(matriz_jogo);
-             
-            
-          do{
-            printf("\nJogar Novamente:\n\n[1] Sim\n[2] Não\n\n->");
-            scanf("%d", &jogar_nov);
-          }while(jogar_nov != 1 && jogar_nov != 2);
-
-
-            if(jogar_nov == 1){
-             jogar_nov = 0;
-             troca_de_tela();
-             iniciar_partida (modo_jogo, matriz_jogo, placar);
-             
-            }
-            else{
-                if(jogar_nov == 2){
-                jogar_nov = 0;
-                troca_de_tela();
-                return; // Sai da função, encerrando a partida
-                }
-            }
-            
-            
-            
         }
-    }
+        reset_tabuleiro(matriz_jogo);
 
-    // 4. Se o loop de 9 rodadas acabar sem vencedores, é empate
-    printf("\nEmpate!");
-    tabuleiro(matriz_jogo);
-    reset_tabuleiro(matriz_jogo);
-    troca_de_tela ();
-    
-
-    do{
-        printf("\nJogar Novamente:\n\n[1] Sim\n[2] Não\n\n->");
-        scanf("%d", &jogar_nov);
-    }while(jogar_nov != 1 && jogar_nov != 2);
-
-    if(jogar_nov == 1){
-        jogar_nov = 0;
-        troca_de_tela ();
-        iniciar_partida (modo_jogo, matriz_jogo, placar);
-    }
-    else{
-        if(jogar_nov == 2){
-        jogar_nov = 0;
-        troca_de_tela();
-        return; // Sai da função, encerrando a partida
-        }
-    }
-
-    
-    sleep(2);
+    } while (jogar_novamente());
 }
 
 // Progressão da Rodada
@@ -249,21 +207,15 @@ void prog_rodada(char matriz_jogo[3][3], int modo_jogo, int dificuldade, int rod
                 }
             }
             // 3° Passo: Jogada Aleatória (Se não tiver o que atacar ou defender)
-            while(1){
+            do {
                 escolha = (rand() % 9) + 1;
-                for (int i=0; i<3; i++){
-                    for (int j=0; j<3; j++){
-                        int linha = (escolha - 1) / 3;
-                        int coluna = (escolha - 1) % 3;
-                        if (matriz_jogo[linha][coluna] != 'x' && matriz_jogo[linha][coluna] != 'o') {
-                            matriz_jogo[linha][coluna] = 'o';
-                            jogada_valida = 1;
-                        }
-                    }
+                int linha  = (escolha - 1) / 3;
+                int coluna = (escolha - 1) % 3;
+                if (matriz_jogo[linha][coluna] != 'x' && matriz_jogo[linha][coluna] != 'o') {
+                    matriz_jogo[linha][coluna] = 'o';
+                    jogada_valida = 1;
                 }
-                if(jogada_valida) break;
-                else escolha = (rand() % 9) + 1;
-            }
+            } while (!jogada_valida);
         }
     }
 }
