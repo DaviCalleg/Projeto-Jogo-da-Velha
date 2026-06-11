@@ -1,9 +1,9 @@
-//Alunos: Arthur Rocha Saldanha, Davi Callegario Caetano e Felipe Silva Mantuani.
+/*Alunos: Arthur Rocha Saldanha, Davi Callegario Caetano e Felipe Silva Mantuani.*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h> // biblioteca para adicionar tempo (Somente para fins visuais)
+#include <unistd.h> // Biblioteca para adicionar tempo (Somente para fins visuais)
 
 // Funções Utilizadas
 void limpar_buffer();
