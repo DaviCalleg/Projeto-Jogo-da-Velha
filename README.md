@@ -2,9 +2,9 @@
 
 Trabalho desenvolvido na disciplina de Logica de Programação, com o objetivo de colocar em pratica os conceitos discutidos em sala de aula. 
 
-- O jogo feito em Linguagem C;
+- Jogo feito em Linguagem C;
 
-- Apresenta funcionalidades basicas dessa modalidade. Porém, ainda conta com:
+- Apresenta funcionalidades basicas dessa modalidade e ainda conta com:
 
 -> Placar:
 Para somatória total da pontuação.
