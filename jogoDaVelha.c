@@ -231,7 +231,7 @@ void jogadaJogador(char matriz_jogo[3][3], char simbolo_jogador, int *escolha, i
             *escolha = 0;
         }
         troca_de_tela();
-            if(*escolha <= 9 && *escolha > 0){
+        if(*escolha <= 9 && *escolha > 0){
                 int linha = (*escolha - 1) / 3;
                 int coluna = (*escolha - 1) % 3;
                 if (matriz_jogo[linha][coluna] == ' ') {
