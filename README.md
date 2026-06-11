@@ -1,24 +1,17 @@
  Jogo da Velha #
 
+Trabalho desenvolvido na disciplina de Logica de Programação, com o objetivo de colocar em pratica os conceitos discutidos em sala de aula. 
 
-Trabalho desenvolvido na disciplina de
-Logica de Programação, com o objetivo 
-de colocar em pratica os conceitos 
-discutidos em sala de aula. 
+- O jogo feito em Linguagem C;
 
-O jogo foi feito em Linguagem C;
+- Apresenta funcionalidades basicas dessa modalidade. Porém, ainda conta com:
 
-Apresenta funcionalidades basicas 
-dessa modalidade. Porém, ainda conta 
-com:
-
-- Placar:
+-> Placar:
 Para somatória total da pontuação.
 
-- Dois modos de jogo:
+-> Dois modos de jogo:
 Sendo Jogador x Jogador e Jogador x Computador.
 
-- Dificuldade aumentada (Jogador x Computador):
-O código é capaz de bloquear jogadas 
-promissoras e efetuar ataques pra ganhar o jogo.
+-> Dificuldade aumentada (Jogador x Computador):
+O código é capaz de bloquear jogadas promissoras e efetuar ataques pra ganhar o jogo.
 
